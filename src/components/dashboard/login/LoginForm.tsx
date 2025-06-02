@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
-import { login } from "@/services/auth";
 import { toast } from "sonner";
 import { setUser } from "@/lib/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
 import { useAppDispatch } from "@/lib/hook";
+import { login } from "@/services/auth";
 
 export function LoginForm() {
     const dispatch = useAppDispatch()
@@ -70,7 +70,7 @@ export function LoginForm() {
 
     // Simulate API call
     try {
-      const res = await login(formData);
+      const res = await login({...formData});
        console.log(res)
       if (res?.success === true) {
        

@@ -13,12 +13,34 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import storage from "./storage";
 import { baseApi } from "./api/baseApi";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+
+// Create noop storage for SSR
+const createNoopStorage = () => {
+  return {
+    getItem(_key: string): Promise<string | null> {
+      return Promise.resolve(null);
+    },
+    setItem(_key: string, value: string): Promise<string> {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: string): Promise<void> {
+      return Promise.resolve();
+    },
+  };
+};
+
+// Create storage that works on both server and client
+const storage = typeof window !== "undefined" 
+  ? createWebStorage("local") 
+  : createNoopStorage();
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage, 
+ 
+  whitelist: ['theme','menu', 'auth'], 
 };
 
 const rootReducer = combineReducers({
@@ -30,16 +52,20 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const makeStore = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }).concat(baseApi.middleware),
-  });
+export const makeStore = () => configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(baseApi.middleware),
+});
 
-export type RootState = ReturnType<typeof makeStore.getState>;
-export type AppDispatch = typeof makeStore.dispatch;
-export const persistor = persistStore(makeStore);
+export type AppStore = ReturnType<typeof makeStore>;
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];
+
+// Create store instance
+export const store = makeStore();
+export const persistor = persistStore(store);

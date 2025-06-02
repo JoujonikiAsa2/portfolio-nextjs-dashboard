@@ -21,6 +21,11 @@ async function getBlogById(id: string): Promise<TBlog | null> {
 }
 
 export default async function EditProjectPage({ params }: { params: { id: string } }) {
+    if (!params) {
+    return {
+      notFound: true,
+    }
+  }
   let blog: TBlog | null= null;
   
   try {

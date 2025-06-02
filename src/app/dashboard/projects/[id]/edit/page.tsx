@@ -21,6 +21,11 @@ async function getProjectById(id: string): Promise<TProject | null> {
 }
 
 export default async function EditProjectPage({ params }: { params: { id: string } }) {
+  if (!params) {
+    return {
+      notFound: true,
+    }
+  }
   let project: TProject | null= null;
   
   try {

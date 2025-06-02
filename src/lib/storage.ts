@@ -9,7 +9,7 @@ interface NoopStorageReturnType {
   setItem: (_key: any, value: any) => Promise<any>;
   removeItem: (_key: any) => Promise<void>;
 }
-const createNoopStorage = (): NoopStorageReturnType => {
+export const createNoopStorage = (): NoopStorageReturnType => {
   return {
     getItem(_key: any): Promise<null> {
       return Promise.resolve(null);
