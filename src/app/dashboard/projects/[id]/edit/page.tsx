@@ -1,6 +1,13 @@
-
+"use client";
 import { TProject } from "@/types/projects";
-import {ProjectForm} from '@/components/dashboard/projects/project-form'
+import dynamic from "next/dynamic";
+
+const ProjectForm = dynamic(
+  () => import("@/components/dashboard/projects/project-form"),
+  {
+    ssr: false, // disables server-side rendering
+  }
+);
 
 async function getProjectById(id: string): Promise<TProject | null> {
   try {
@@ -20,14 +27,18 @@ async function getProjectById(id: string): Promise<TProject | null> {
   }
 }
 
-export default async function EditProjectPage({ params }: { params: { id: string } }) {
+export default async function EditProjectPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   if (!params) {
     return {
       notFound: true,
-    }
+    };
   }
-  let project: TProject | null= null;
-  
+  let project: TProject | null = null;
+
   try {
     const awaitedParams = await Promise.resolve(params);
     project = await getProjectById(awaitedParams.id);
@@ -43,5 +54,5 @@ export default async function EditProjectPage({ params }: { params: { id: string
       </div>
       <ProjectForm project={project} />
     </div>
-  )
+  );
 }

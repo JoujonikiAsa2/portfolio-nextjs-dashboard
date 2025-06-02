@@ -1,4 +1,10 @@
-import { ProjectForm } from "@/components/dashboard/projects/project-form"
+'use client';
+
+import dynamic from 'next/dynamic';
+
+const ProjectForm = dynamic(() => import('@/components/dashboard/projects/project-form'), {
+  ssr: false, // disables server-side rendering
+});
 
 export default function NewProjectPage() {
   return (

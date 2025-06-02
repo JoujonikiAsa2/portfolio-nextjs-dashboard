@@ -13,7 +13,7 @@ import { addProject, updateProject } from "@/services/project";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
-export const ProjectForm = ({ project }: { project?: TProject | null }) => {
+export default function ProjectForm ({ project }: { project?: TProject | null }) {
   const [imagePreview, setImagePreview] = React.useState("");
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const router = useRouter();
