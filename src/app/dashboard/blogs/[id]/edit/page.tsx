@@ -1,6 +1,13 @@
 
-import { BlogForm } from "@/components/dashboard/blogs/blog-form";
+import dynamic from "next/dynamic";
 import { TBlog } from "@/types/blog";
+
+const BlogForm = dynamic(
+  () => import("@/components/dashboard/blogs/blog-form"),
+  {
+    ssr: true,
+  }
+);
 
 async function getBlogById(id: string): Promise<TBlog | null> {
   try {
@@ -20,17 +27,22 @@ async function getBlogById(id: string): Promise<TBlog | null> {
   }
 }
 
-export default async function EditProjectPage({ params }: { params: { id: string } }) {
-    if (!params) {
+export default async function EditBlogPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  if (!params) {
     return {
       notFound: true,
-    }
+    };
   }
-  let blog: TBlog | null= null;
-  
+  let blog: TBlog | null = null;
+
   try {
     const awaitedParams = await Promise.resolve(params);
     blog = await getBlogById(awaitedParams.id);
+    console.log({blog})
   } catch (error) {
     console.error("Error fetching review:", error);
   }
@@ -43,5 +55,5 @@ export default async function EditProjectPage({ params }: { params: { id: string
       </div>
       <BlogForm blog={blog} />
     </div>
-  )
+  );
 }

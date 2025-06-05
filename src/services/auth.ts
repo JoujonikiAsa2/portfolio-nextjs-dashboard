@@ -7,6 +7,7 @@ const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 console.log(url);
 
 export const login = async (payload: { email: string; password: string }) => {
+  console.log(payload)
   const res = await fetch(`${url}/auth`, {
     method: "POST",
     headers: {
@@ -18,6 +19,7 @@ export const login = async (payload: { email: string; password: string }) => {
     }),
   });
   const response = await res.json();
+  console.log(res)
   console.log(response);
   if (response.success && response.data.accessToken) {
     const { data } = response;

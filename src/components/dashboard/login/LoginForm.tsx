@@ -61,6 +61,8 @@ export function LoginForm() {
     });
   };
 
+  console.log(JSON.stringify(formData))
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

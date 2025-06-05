@@ -42,8 +42,6 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
     githubFullStack: project?.githubFullStack || "",
   });
 
-  console.log(formData)
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -141,18 +139,14 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
     }
     transformedFormData.append("data", JSON.stringify(formData));
 
-    console.log(formData);
-
     if (project) {
       const res = await updateProject(
         project._id as string,
         transformedFormData
       );
-      console.log({ res });
       toast.success(res.message);
     } else {
       const res = await addProject(transformedFormData);
-      console.log({ res });
       toast.success(res.message);
     }
 
