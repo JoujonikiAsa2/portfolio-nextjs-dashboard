@@ -12,8 +12,13 @@ import { TProject } from "@/types/projects";
 import { addProject, updateProject } from "@/services/project";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { formats, modules } from "@/utils/quilModule";
 
-export default function ProjectForm ({ project }: { project?: TProject | null }) {
+export default function ProjectForm({
+  project,
+}: {
+  project?: TProject | null;
+}) {
   const [imagePreview, setImagePreview] = React.useState("");
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const router = useRouter();
@@ -21,7 +26,6 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
   const [techInput, setTechInput] = React.useState("");
   const [featureInput, setFeatureInput] = React.useState("");
   const [challengeInput, setChallengeInput] = React.useState("");
-
 
   const [formData, setFormData] = React.useState<Partial<TProject>>({
     title: project?.title || "",
@@ -130,7 +134,7 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    formData.description = value
+    formData.description = value;
     // Create FormData object for API submission
     const transformedFormData = new FormData();
     if (imageFile) {
@@ -184,7 +188,14 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
             </div>
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <ReactQuill theme="snow" value={value} onChange={setValue} placeholder="Enter description" />
+              <ReactQuill
+                modules={modules}
+                formats={formats}
+                theme="snow"
+                value={value}
+                onChange={setValue}
+                placeholder="Enter description"
+              />
             </div>
 
             <div className="grid gap-3 mt-12">
@@ -440,4 +451,4 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
       </Card>
     </form>
   );
-};
+}

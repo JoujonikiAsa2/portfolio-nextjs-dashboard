@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -22,10 +21,11 @@ import { addBlog, updateBlog } from "@/services/blog";
 import { toast } from "sonner";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { formats, modules } from "@/utils/quilModule";
 
 export default function BlogForm({ blog }: { blog?: TBlog | null }) {
   const router = useRouter();
-  const [value, setValue] = React.useState<string>("");
+  const [value, setValue] = React.useState<string>(blog?.content || "");
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [formData, setFormData] = useState<Partial<TBlog>>({
     authorname: blog?.authorname || "",
@@ -42,10 +42,12 @@ export default function BlogForm({ blog }: { blog?: TBlog | null }) {
       setImageFile(files[0]);
     }
   };
+
+  console.log(value);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     formData.content = value;
-    // Create FormData object for API submission
     const transformedFormData = new FormData();
     if (imageFile) {
       transformedFormData.append("file", imageFile);
@@ -54,9 +56,11 @@ export default function BlogForm({ blog }: { blog?: TBlog | null }) {
 
     if (blog) {
       const res = await updateBlog(blog._id as string, transformedFormData);
+      console.log(res);
       toast.success(res.message);
     } else {
       const res = await addBlog(transformedFormData);
+      console.log(res);
       toast.success(res.message);
     }
 
@@ -134,6 +138,8 @@ export default function BlogForm({ blog }: { blog?: TBlog | null }) {
             <div className="grid gap-3">
               <Label htmlFor="description">Content</Label>
               <ReactQuill
+                modules={modules}
+                formats={formats}
                 theme="snow"
                 value={value}
                 onChange={setValue}
