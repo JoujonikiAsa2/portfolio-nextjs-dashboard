@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FileCode, FileText, Home, Layers } from "lucide-react";
+import { FileCode, FileText, Home, Layers, MessageSquare, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-// import { auth } from "@/auth";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { useSelector } from "react-redux";
@@ -37,15 +36,22 @@ const adminBar = [
     url: "/dashboard/blogs",
     icon: FileText,
   },
+  {
+    title: "Profile",
+    url: "/dashboard/profile",
+    icon: User,
+  },
+  {
+    title: "Messages",
+    url: "/dashboard/messages",
+    icon: MessageSquare,
+  },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = useSelector((state: RootState) => {
-    console.log("Redux state in sidebar:", state);
     return state.auth?.user;
   });
-
-  console.log(data);
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

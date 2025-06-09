@@ -5,7 +5,6 @@ import getTokenFromCookies from "@/utils/getTokenFromCookies";
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-console.log(backend_url);
 
 export const getProjects = async () => {
   try {
@@ -40,7 +39,6 @@ export const getProjectById = async (id: string) => {
 export const updateProject = async (id: string, payload: any) => {
   try {
     const token = await getTokenFromCookies();
-    console.log(payload)
     const result = await fetch(`${backend_url}/project/${id}`, {
       method: "PATCH",
       headers: {

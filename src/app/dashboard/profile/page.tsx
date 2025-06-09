@@ -1,4 +1,5 @@
-// import { ProfileForm } from "@/components/dashboard/profile/profile-form"
+import { ProfileForm } from "@/components/dashboard/profile/profile-form";
+import { Form } from "@/components/ui/form";
 
 export default function ProfilePage() {
   return (
@@ -7,7 +8,9 @@ export default function ProfilePage() {
         <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
         <p className="text-muted-foreground">Manage your personal profile</p>
       </div>
-      {/* <ProfileForm /> */}
+      <div>
+        <ProfileForm/>
+      </div>
     </div>
   )
 }

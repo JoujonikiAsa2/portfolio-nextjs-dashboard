@@ -7,7 +7,6 @@ export async function middleware(request: NextRequest) {
   // Current route
   const route = request.nextUrl.pathname;
   const token = await getTokenFromCookies();
-  console.log("token from middleware", token);
   const isPublicRoute = route === "/";
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/", request.url));

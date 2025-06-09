@@ -45,7 +45,6 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      console.log(files);
       setImageFile(files[0]);
     }
   };
@@ -152,8 +151,6 @@ export default function ProjectForm ({ project }: { project?: TProject | null })
 
     router.push("/dashboard/projects");
   };
-
-  console.log(formData);
 
   return (
     <form onSubmit={handleSubmit}>

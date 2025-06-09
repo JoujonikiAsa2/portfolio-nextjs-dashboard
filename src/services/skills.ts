@@ -5,8 +5,6 @@ import getTokenFromCookies from "@/utils/getTokenFromCookies";
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-console.log(backend_url);
-
 export const getAllSkills = async () => {
   try {
     const result = await fetch(`${backend_url}/skill`, {
@@ -39,7 +37,6 @@ export const getSkillById = async (id: string) => {
 
 export const updateSkill = async (id: string, payload: any) => {
   try {
-    console.log(payload);
     const token = await getTokenFromCookies();
     const result = await fetch(`${backend_url}/skill/${id}`, {
       method: "PATCH",
@@ -49,7 +46,6 @@ export const updateSkill = async (id: string, payload: any) => {
       body: payload,
     });
     const res = await result.json();
-    console.log(res);
     return res;
   } catch (error) {
     console.error(error);
@@ -58,7 +54,6 @@ export const updateSkill = async (id: string, payload: any) => {
 
 export const addSkill = async (payload: any) => {
   try {
-    console.log(payload);
     const token = await getTokenFromCookies();
     const result = await fetch(`${backend_url}/skill`, {
       method: "POST",
@@ -68,7 +63,6 @@ export const addSkill = async (payload: any) => {
       body: payload,
     });
     const res = await result.json();
-    console.log(res);
     return res;
   } catch (error) {
     console.error(error);
@@ -77,7 +71,6 @@ export const addSkill = async (payload: any) => {
 
 export const deleteSkill = async (id: string) => {
   try {
-    console.log(id);
     const token = await getTokenFromCookies();
     const result = await fetch(`${backend_url}/skill/${id}`, {
       method: "DELETE",
@@ -86,7 +79,6 @@ export const deleteSkill = async (id: string) => {
       },
     });
     const res = await result.json();
-    console.log(res);
     return res;
   } catch (error) {
     console.error(error);

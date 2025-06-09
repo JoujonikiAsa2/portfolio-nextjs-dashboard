@@ -13,8 +13,7 @@ export default function DashboardLayout({
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-
-        <div className="flex flex-1 flex-col p-2 lg:p-12">{children}</div>
+        <div className="flex flex-1 flex-col p-2 lg:p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

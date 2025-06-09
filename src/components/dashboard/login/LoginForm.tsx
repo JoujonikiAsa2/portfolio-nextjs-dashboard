@@ -61,8 +61,6 @@ export function LoginForm() {
     });
   };
 
-  console.log(JSON.stringify(formData))
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,7 +71,6 @@ export function LoginForm() {
     // Simulate API call
     try {
       const res = await login({...formData});
-       console.log(res)
       if (res?.success === true) {
        
         const user = verifyToken(res.data.accessToken)

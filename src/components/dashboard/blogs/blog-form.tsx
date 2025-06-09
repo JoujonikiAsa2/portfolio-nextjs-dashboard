@@ -39,7 +39,6 @@ export default function BlogForm({ blog }: { blog?: TBlog | null }) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      console.log(files);
       setImageFile(files[0]);
     }
   };

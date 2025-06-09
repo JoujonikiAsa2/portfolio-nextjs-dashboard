@@ -42,7 +42,6 @@ export default async function EditBlogPage({
   try {
     const awaitedParams = await Promise.resolve(params);
     blog = await getBlogById(awaitedParams.id);
-    console.log({blog})
   } catch (error) {
     console.error("Error fetching review:", error);
   }

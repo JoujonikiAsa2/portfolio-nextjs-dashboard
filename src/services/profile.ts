@@ -20,7 +20,7 @@ export const getProfile = async () => {
   }
 };
 
-export const updateProfile = async (id: string, payload: Partial<TProfile>) => {
+export const updateProfile = async (id: string, payload: any) => {
   try {
     const token = await getTokenFromCookies();
     const result = await fetch(`${backend_url}/profile/${id}`, {
@@ -37,7 +37,7 @@ export const updateProfile = async (id: string, payload: Partial<TProfile>) => {
   }
 };
 
-export const addProfile = async (payload: Partial<TProfile>) => {
+export const addProfile = async (payload: any) => {
   try {
     const token = await getTokenFromCookies();
     const result = await fetch(`${backend_url}/profile`, {
@@ -45,7 +45,7 @@ export const addProfile = async (payload: Partial<TProfile>) => {
       headers: {
         Authorization: `${token}`,
       },
-      body: payload,
+       body: payload,
     });
     const res = await result.json();
     return res;

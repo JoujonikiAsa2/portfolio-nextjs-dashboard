@@ -1,9 +1,16 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,37 +20,37 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Edit, Trash } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { deleteBlog, getBlogs } from "@/services/blog"
-import useFetch from "@/hooks/useFetch"
-import { TBlog } from "@/types/blog"
+} from "@/components/ui/alert-dialog";
+import { Edit, Trash } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { deleteBlog, getBlogs } from "@/services/blog";
+import useFetch from "@/hooks/useFetch";
+import { TBlog } from "@/types/blog";
 
 export function BlogsTable() {
-  const [deleteId, setDeleteId] = useState<string | null>(null)
- const { response: blogData,refetch } = useFetch(getBlogs);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const { response: blogData, refetch, loading } = useFetch(getBlogs);
   const blogs = blogData?.data;
   const handleDelete = () => {
     if (deleteId) {
-      deleteBlog(deleteId)
-      setDeleteId(null)
-      refetch()
+      deleteBlog(deleteId);
+      setDeleteId(null);
+      refetch();
     }
-  }
+  };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   return (
-    <>
-      <div className="rounded-md border overflow-hidden">
+    <div className="rounded-md border h-full max-h-[75vh]">
+      <div className="h-full overflow-scroll lg:overflow-x-hidden ">
         <Table>
           <TableHeader>
             <TableRow>
@@ -55,16 +62,18 @@ export function BlogsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {blogs?.length === 0 ? (
+            {loading ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
                   No blogs found. Add your first blog post.
                 </TableCell>
               </TableRow>
             ) : (
-              blogs?.map((blog:TBlog) => (
+              blogs?.map((blog: TBlog) => (
                 <TableRow key={blog._id}>
-                  <TableCell className="font-medium">{blog.blogtitle}</TableCell>
+                  <TableCell className="font-medium">
+                    {blog.blogtitle}
+                  </TableCell>
                   <TableCell>{blog.authorname}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{blog.category}</Badge>
@@ -78,7 +87,11 @@ export function BlogsTable() {
                           <span className="sr-only">Edit</span>
                         </Link>
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => setDeleteId(blog._id)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setDeleteId(blog._id)}
+                      >
                         <Trash className="h-4 w-4" />
                         <span className="sr-only">Delete</span>
                       </Button>
@@ -91,12 +104,16 @@ export function BlogsTable() {
         </Table>
       </div>
 
-      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+      <AlertDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the blog post and all associated comments.
+              This action cannot be undone. This will permanently delete the
+              blog post and all associated comments.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -105,6 +122,6 @@ export function BlogsTable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
-  )
+    </div>
+  );
 }

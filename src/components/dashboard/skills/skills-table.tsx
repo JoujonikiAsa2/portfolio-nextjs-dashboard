@@ -36,7 +36,6 @@ export function SkillsTable() {
     if (deleteId) {
       const res = await deleteSkill(deleteId);
       setDeleteId(null);
-      console.log(res);
       toast.success(res.message);
       refetch()
     } else {
@@ -45,8 +44,8 @@ export function SkillsTable() {
   };
 
   return (
-    <>
-      <div className="rounded-md border overflow-hidden">
+    <div className="rounded-md border h-full max-h-[75vh]">
+      <div className="h-full overflow-scroll lg:overflow-x-hidden ">
         <Table>
           <TableHeader>
             <TableRow>
@@ -116,6 +115,6 @@ export function SkillsTable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </div>
   );
 }

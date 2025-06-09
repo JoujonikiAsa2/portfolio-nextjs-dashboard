@@ -1,33 +1,27 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { TSkill } from "@/types/skill";
-import { addSkill, updateSkill } from "@/services/skills";
+import { TProfile } from "@/types/profile";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
+import { addProfile, getProfile, updateProfile } from "@/services/profile";
+import useFetch from "@/hooks/useFetch";
+import Image from "next/image";
 
-export const SkillForm = ({ skill }: { skill?: TSkill | null }) => {
-  const [imagePreview, setImagePreview] = React.useState("");
+export const ProfileForm = () => {
+  const { response: profileData } = useFetch(getProfile);
+  const profile = profileData?.data;
+  const [type, setType] = React.useState("add");
+  const [imagePreview, setImagePreview] = React.useState(profile?.thumbnail);
   const [imageFile, setImageFile] = React.useState<File | null>(null);
-  const router = useRouter();
-  const [formData, setFormData] = React.useState<Partial<TSkill>>({
-    name: skill?.name || "",
-    thumbnail: skill?.thumbnail || "",
-    skillType: skill?.skillType || "TECHNICAL",
+  const [formData, setFormData] = React.useState<Partial<TProfile>>({
+    thumbnail: profile?.thumbnail,
+    resume: profile?.resume,
   });
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -55,50 +49,34 @@ export const SkillForm = ({ skill }: { skill?: TSkill | null }) => {
     }
     transformedFormData.append("data", JSON.stringify(formData));
 
-    if (skill) {
-      const res= await updateSkill(skill._id, transformedFormData);
-      toast.success(res.message)
+    if (type === "update") {
+      const res = await updateProfile(profile._id, transformedFormData);
+      toast.success(res.message);
     } else {
-      const res = await addSkill(transformedFormData);
-      toast.success(res.message)
+      const res = await addProfile(transformedFormData);
+      toast.success(res.message);
     }
-
-    router.push("/dashboard/skills");
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <Card className="mt-6">
-        <div
-          className="h-[300px]"
-          style={{
-            backgroundImage: imagePreview
-              ? `url('${imagePreview}')`
-              : formData?.thumbnail
-              ? `url('${formData?.thumbnail}')`
-              : "none",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundBlendMode: "overlay",
-          }}
-        ></div>
         <CardContent className="pt-6">
           <div className="grid gap-6">
             <div className="grid gap-3">
-              <Label htmlFor="name">Skill Name</Label>
+              <Label htmlFor="resume">Resume</Label>
               <Input
-                id="name"
-                value={formData.name}
+                id="resume"
+                type="text"
+                value={profile?.resume || formData.resume}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setFormData({ ...formData, resume: e.target.value })
                 }
-                required
               />
             </div>
 
             <div className="grid gap-3">
-              <Label htmlFor="icon">Icon</Label>
+              <Label htmlFor="Thumbnail">Profile Thumbnail</Label>
               <Label
                 htmlFor="image-upload"
                 className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-700 bg-opacity-50 hover:bg-gray-600 transition-all"
@@ -122,37 +100,21 @@ export const SkillForm = ({ skill }: { skill?: TSkill | null }) => {
                   onChange={handleFileChange}
                 />
               </Label>
-            </div>
-
-            <div className="grid gap-3">
-              <Label htmlFor="skillType">Skill Type</Label>
-              <Select
-                value={formData.skillType}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, skillType: value })
-                }
-                required
-              >
-                <SelectTrigger id="skillType">
-                  <SelectValue placeholder="Select skill type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="TECHNICAL">Technical Skill</SelectItem>
-                  <SelectItem value="SOFT">Soft Skill</SelectItem>
-                </SelectContent>
-              </Select>
+                <Image
+                  src={imagePreview || profile?.thumbnail}
+                  alt="Preview"
+                  width={200}
+                  height={200}
+                  className="mt-2 rounded-md object-cover border"
+                />
             </div>
 
             <div className="flex gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/dashboard/skills")}
-              >
-                Cancel
+              <Button type="submit" onClick={() => setType("update")}>
+                Update profile
               </Button>
-              <Button type="submit">
-                {skill ? "Update Skill" : "Add Skill"}
+              <Button type="submit" onClick={() => setType("add")}>
+                Add New profile
               </Button>
             </div>
           </div>
