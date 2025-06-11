@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useFetch from "@/hooks/useFetch";
+import { getBlogs } from "@/services/blog";
 import { getMessages } from "@/services/message";
 import { getProfile } from "@/services/profile";
 import { getProjects } from "@/services/project";
@@ -12,7 +13,7 @@ export function DashboardOverview() {
   const projects = ProjectData?.data;
   const { response: skillData } = useFetch(getAllSkills);
   const skills = skillData?.data;
-  const { response: blogData } = useFetch(getProjects);
+  const { response: blogData } = useFetch(getBlogs);
   const blogs = blogData?.data;
   const { response: messageData } = useFetch(getMessages);
   const messages = messageData?.data;
